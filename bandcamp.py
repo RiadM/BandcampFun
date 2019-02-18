@@ -5,7 +5,7 @@
 
 
 # Import the module we need
-import bs4, requests
+import bs4, requests, artistfinder
 
 # Variable 
 research_url_string = "https://bandcamp.com/search?q="
@@ -13,8 +13,6 @@ confirm_choice = ["yes","ya","y"]
 
 
 def list_album_in_artist_page(url_artist):
-    set_of_url = set()
-    
     res = requests.get(url_artist)
     element = bs4.BeautifulSoup(res.text, "html.parser")
     results = element.findAll("a", href=True)
@@ -30,20 +28,15 @@ def list_album_in_artist_page(url_artist):
 
 
 print("\nWelcome to Bandcamp fun, which artist would you like to find on the website.\n")
-
-
 while True:
     # TODO we should make something so we can decide between artist or album
-    # user_search_query = input("Artist to look for: ")
     
-    user_search_query = "loud larry adjust"
-    
+    user_search_query = input("Artist to look for: ")
+
     url_for_the_search = research_url_string + user_search_query
     
     res = requests.get(url_for_the_search)
-
     artist = bs4.BeautifulSoup(res.text, "html.parser")
-
     search_results = artist.findAll("div", {"class":"result-info"})
 
     for result in search_results:
@@ -66,8 +59,9 @@ while True:
             
             # If the user want to go the artist page we will give them all the infos
             if input(question_string) in confirm_choice:
-                print(res[3].getText().strip())
-                list_album_in_artist_page(res[3].getText().strip())
+                url_artist = str(res[3].getText()).strip()
+                url_artist_menu = url_artist + "/music"
+                artistfinder.list_album_in_artist_page(url_artist_menu,url_artist)
                 
 
 
