@@ -50,8 +50,11 @@ def downloader(url):
             # Download the song and save them
             for chunk in mp3_object.iter_content(10000):
                 mp3_file.write(chunk)
+        
             # Close the file after it's completed
             mp3_file.close()
-
+        
+        # Go out of the album directory
+        os.chdir('..')
         os.system('cls||clear')
         return "%s was downloaded\n" % (titles[0])
